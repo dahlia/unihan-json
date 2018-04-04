@@ -1,0 +1,32 @@
+language: python
+python: "3.6"
+install:
+- wget ftp://ftp.unicode.org/Public/11.0.0/ucd/Unihan-11.0.0d2.zip
+- unzip -d Unihan Unihan-*.zip
+script:
+- '[[ "$TRAVIS_TAG" = "" ]] || grep "$TRAVIS_TAG" README.md'
+- '[[ "$TRAVIS_TAG" = "" ]] || grep "${TRAVIS_TAG%-[0-9]*}" .travis.yml'
+- ./process.py Unihan unihan-json
+- |
+  git clone \
+    -b gh-pages \
+    "https://$GITHUB_TOKEN:x-oauth-basic@github.com/dahlia/unihan-json.git" \
+    /tmp/gh-pages
+- rm -rf /tmp/gh-pages/$TRAVIS_BRANCH
+- cp -r unihan-json /tmp/gh-pages/$TRAVIS_BRANCH
+- |
+  pushd /tmp/gh-pages
+  git add "$TRAVIS_BRANCH"
+  git commit -m "Update: $TRAVIS_BRANCH"
+  git push origin gh-pages
+  popd
+before_deploy:
+- tar cvfz "unihan-json-$TRAVIS_TAG.tar.gz" unihan-json/
+deploy:
+- provider: releases
+  api_key: "$GITHUB_TOKEN"
+  file_glob: true
+  file: unihan-json-*.tar.gz
+  skip_cleanup: true
+  on:
+    tags: true

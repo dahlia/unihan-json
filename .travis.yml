@@ -1,8 +1,8 @@
 language: python
 python: "3.6"
 install:
-- wget ftp://ftp.unicode.org/Public/11.0.0/ucd/Unihan-11.0.0d2.zip
-- unzip -d Unihan Unihan-*.zip
+- wget ftp://ftp.unicode.org/Public/12.1.0/ucd/Unihan.zip
+- unzip -d Unihan Unihan*.zip
 script:
 - '[[ "$TRAVIS_TAG" = "" ]] || grep "$TRAVIS_TAG" README.md'
 - '[[ "$TRAVIS_TAG" = "" ]] || grep "${TRAVIS_TAG%-[0-9]*}" .travis.yml'

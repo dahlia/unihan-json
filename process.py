@@ -81,7 +81,7 @@ PROP_PARSERS: Mapping[str, Callable[[str], object]] = {
     'kOtherNumeric': int,
     'kPrimaryNumeric': int,
     'kSimplifiedVariant': parse_unicode_points,
-    'kTaiwanTelegraph': int,
+    'kTaiwanTelegraph': parse_ints,
     'kTang': str.split,
     'kTotalStrokes': parse_ints,
     'kTraditionalVariant': parse_unicode_points,
@@ -149,7 +149,14 @@ class PropWriter:
                     except ValueError as e:
                         raise ValueError(f'{e}: {line!r}')
                     char = parse_unicode_point(code)
-                    parsed_value = parse_value(value)
+                    try:
+                        parsed_value = parse_value(value)
+                    except Exception as e:
+                        self.logger.exception(
+                            'Failed to parse %s property (%r): %s',
+                            prop, value, e
+                        )
+                        raise
                     if first:
                         wf('\n')
                         first = False

@@ -11,7 +11,7 @@ To download JSON data files, see the [latest release].  To load them from a web
 page through XHR or `window.fetch()` function, request the following URI
 (replace `<PROP>` with a property name, e.g., `kSimplifiedVariant`):
 
-    https://dahlia.github.io/unihan-json/11.0.0d2-0/<PROP>.json
+    https://dahlia.github.io/unihan-json/12.1.0/<PROP>.json
 
 Each JSON file corresponds to a property, and is an object which represents
 a table from Unicode characters to values for the property.  For example,
